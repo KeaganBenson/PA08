@@ -131,7 +131,7 @@ public class HashTable implements IHashTable {
         // makes sure value is not null and we have not looped through the whole table
         while(table[key] != null && bucketsProbed < capacity()){
             // checks if key is located where it maps to and if not checks the next space in the linear prob
-            if(table[key] == value && table[key] != bridge){
+            if(table[key].equals(value) && table[key] != bridge){
                 return true;
             }
             key = (key+1)%capacity();
