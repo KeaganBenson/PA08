@@ -52,27 +52,23 @@ public class LineCounter {
         HashTable[] tableList = new HashTable[numArgs];
 
         // Preprocessing: Read every file and create a HashTable
-
+        String check = "";
         for (int i = 0; i < numArgs; i++) {
             File file = new File(args[i]);
             HashTable tbl = new HashTable();
             try(Scanner scanner = new Scanner(file)) {
                 while (scanner.hasNextLine()) {
-                    tbl.insert(scanner.nextLine());
+                    String value = scanner.nextLine();
+                    check = value;
+                    tbl.insert(value);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                System.out.println("fuck");
-
             }
             tableList[i] = tbl;
         }
 
         // Find similarities across files
-        System.out.println(tableList[0].toString());
-        System.out.println(tableList[1].toString());
-        System.out.println(tableList[2].toString());
-        System.out.println(tableList[3].toString());
 
         for (int i = 0; i < numArgs; i++) {
             printFileName(args[i]);
@@ -81,22 +77,21 @@ public class LineCounter {
                 int similar = 0;
                 if (i != j) {
                     File file = new File(args[i]);
-                    //System.out.println();
-                    try {
-                        Scanner scanner = new Scanner(file);
+                    try(Scanner scanner = new Scanner(file)) {
                         while (scanner.hasNextLine()) {
-                            System.out.println(scanner.nextLine());
-                            System.out.println(tableList[j]);
-                            if(tableList[j].lookup(scanner.nextLine())){
-                                similar++;
+                            String value = scanner.nextLine();
+                            check = value;
+                            if(check != null){
+                                total++;
+                                if(tableList[j].lookup(check)){
+                                    similar++;
+                                }
                             }
-                            total++;
                         }
-                    }catch (FileNotFoundException e) {
-                        System.out.println("fuck me");
-
+                    } catch (IOException e) {
+                        e.printStackTrace();
                     }
-                    printStatistics(args[j],total);
+                    printStatistics(args[j],(int)(similar*100/total));
                 }
 
             }

@@ -92,9 +92,6 @@ public class HashTable implements IHashTable {
                 size++;
                 return true;
             }
-            if(table[key] == value){
-                return false;
-            }
             // increments collisoncounter as well as key and bucket probed
             collisonCounter ++;
             key = (key+1) % capacity();
